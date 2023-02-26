@@ -69,6 +69,8 @@ class WindowCompareStations:
             press = station.get("data").get("last").get("press")
             wavg = station.get("data").get("last").get("wavg")
             precip = station.get("data").get("last").get("precip24")
+            if precip is None:
+                precip = 0
             self.names.append(name)
             self.temps.append(temp)
             self.heats.append(heat)
