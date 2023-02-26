@@ -17,7 +17,7 @@ class WindowStationInfo:
         self.max_number_of_stations_to_compare = 4
 
         self.top = Toplevel()
-        self.top.minsize(960, 720) # 1280, 720 # 800, 600
+        self.top.minsize(960, 720)
         self.top.title('Stanica')
 
         self.frame_name = LabelFrame(self.top)
@@ -31,7 +31,7 @@ class WindowStationInfo:
         self.frame_name.place(relx=0.5, rely=0.1, anchor=N)
         self.frame_stats_datetime.place(relx=0.5, rely=0.2, anchor=N)
         self.frame_stats_placeholder.place(relx=0.45, rely=0.3, anchor=N)
-        self.frame_stats.place(relx=0.55, rely=0.3, anchor=N)
+        self.frame_stats.place(relx=0.6, rely=0.3, anchor=N)
         self.frame_compare1.place(relx=0.4, rely=0.5, anchor=N)
         self.frame_compare2.place(relx=0.6, rely=0.5, anchor=N)
         self.frame_button_compare.place(relx=0.5, rely=0.8, anchor=N)
@@ -85,6 +85,12 @@ class WindowStationInfo:
         else:
             self.wavg = str(self.wavg) + " m/s"
 
+        self.precip = json_file.get("data").get("last").get("precip24")
+        if (self.precip == None):
+            self.precip = error_message
+        else:
+            self.precip = str(self.precip) + " mm"
+
         self.stations_can_compare = []
 
         for station in self.stations_dict_all:
@@ -99,7 +105,8 @@ class WindowStationInfo:
         text2 = "Osjet temperature: "
         text3 = "Relativna vlažnost: "
         text4 = "Tlak zraka: "
-        text5 = "Brzina vjetra : "
+        text5 = "Brzina vjetra: "
+        text6 = "Oborine u posljednja 24h: "
 
         self.label_1 = Label(self.frame_stats_placeholder, text=text1)
         self.label_1.pack()
@@ -115,6 +122,9 @@ class WindowStationInfo:
 
         self.label_5 = Label(self.frame_stats_placeholder, text=text5)
         self.label_5.pack()
+
+        self.label_6 = Label(self.frame_stats_placeholder, text=text6)
+        self.label_6.pack()
 
     def display_station_info(self):
         self.reset_frame_by_name(self.frame_name)
@@ -136,6 +146,8 @@ class WindowStationInfo:
         self.label_press.pack()
         self.label_wavg = Label(self.frame_stats, text=self.wavg)
         self.label_wavg.pack()
+        self.label_precip = Label(self.frame_stats, text=self.precip)
+        self.label_precip.pack()
 
     def display_compare_list(self):
         self.reset_frame_by_name(self.frame_compare1)
@@ -250,10 +262,7 @@ class WindowStationInfo:
         
         stations_to_compare_to = []
         for station in self.stations_dict_all:
-            print(station.get("name"))
-            print(self.json_file.get("data").get("station").get("name"))
             if station.get("name") == self.json_file.get("data").get("station").get("name"):
-                print("IF")
                 continue
             current_station = station_data.get_station_data(station.get("url"))
             current_station_coordinates = (current_station.get("data").get("station").get("lat"), current_station.get("data").get("station").get("lon"))

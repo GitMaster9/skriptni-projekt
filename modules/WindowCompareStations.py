@@ -1,28 +1,22 @@
 from tkinter import *
 import matplotlib
 matplotlib.use('TkAgg')
-
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.figure import Figure
+import random
 
 import matplotlib.pyplot as plt
 from PIL import Image, ImageTk
-from tkinter import ttk
 
 error_message = "Nema podataka"
 offset_y = 0.03
+random_limit = 100000
 
 class WindowCompareStations:
     def __init__(self, json_file, stations_to_compare):
         self.json_file = json_file
         self.stations_to_compare = stations_to_compare
 
-        print(self.json_file.get("data").get("station").get("name"))
-        for station in self.stations_to_compare:
-            print(station.get("data").get("station").get("name"))
-
         self.top = Toplevel()
-        self.top.minsize(960, 720) # 1280, 720 # 800, 600
+        self.top.minsize(960, 720)
         self.top.title('Usporedba stanica')
 
         self.get_data_from_stations()
@@ -32,6 +26,7 @@ class WindowCompareStations:
         self.graph_rhs()
         self.graph_presses()
         self.graph_wavgs()
+        self.graph_precips()
 
         self.show_graphs()
 
@@ -60,6 +55,12 @@ class WindowCompareStations:
         wavg = self.json_file.get("data").get("last").get("wavg")
         self.wavgs.append(wavg)
 
+        self.precips = []
+        precip = self.json_file.get("data").get("last").get("precip24")
+        if precip is None:
+            precip = 0
+        self.precips.append(precip)
+
         for station in self.stations_to_compare:
             name = station.get("data").get("station").get("name")
             temp = station.get("data").get("last").get("temp")
@@ -67,78 +68,102 @@ class WindowCompareStations:
             rh = station.get("data").get("last").get("rh")
             press = station.get("data").get("last").get("press")
             wavg = station.get("data").get("last").get("wavg")
+            precip = station.get("data").get("last").get("precip24")
             self.names.append(name)
             self.temps.append(temp)
             self.heats.append(heat)
             self.rhs.append(rh)
             self.presses.append(press)
             self.wavgs.append(wavg)
-
-        print(self.temps)
+            self.precips.append(precip)
 
     def reset_frame_by_name(self, frameName):
         for widget in frameName.winfo_children():
             widget.destroy()
 
     def graph_temps(self):
-        self.figure1 = plt.figure("Figure 1")
-
-        plt.bar(self.names, self.temps, width=0.3)
+        random_number = random.randint(0, random_limit)
+        random_name = "Figure " + str(random_number)
+        self.figure1 = plt.figure(random_name)
 
         for i in range(len(self.names)):
+            plt.bar(self.names[i], self.temps[i], width=0.3, label=self.names[i])
             plt.text(i, self.temps[i] / 2, self.temps[i], ha = 'center')
 
-        plt.title("Temperature")
-        plt.ylabel("Stupnjevi C")
+        plt.title("Temperatura")
+        plt.ylabel("°C")
+        plt.legend()
         plt.savefig("temps.png")
 
     def graph_heats(self):
-        self.figure1 = plt.figure("Figure 2")
-
-        plt.bar(self.names, self.heats, width=0.3)
+        random_number = random.randint(0, random_limit)
+        random_name = "Figure " + str(random_number)
+        self.figure2 = plt.figure(random_name)
 
         for i in range(len(self.names)):
+            plt.bar(self.names[i], self.heats[i], width=0.3, label=self.names[i])
             plt.text(i, self.heats[i] / 2, self.heats[i], ha = 'center')
 
         plt.title("Osjećaj temperature")
-        plt.ylabel("Stupnjevi C")
+        plt.ylabel("°C")
+        plt.legend()
         plt.savefig("heats.png")
 
     def graph_rhs(self):
-        self.figure2 = plt.figure("Figure 3")
-
-        plt.bar(self.names, self.rhs, width=0.3)
+        random_number = random.randint(0, random_limit)
+        random_name = "Figure " + str(random_number)
+        self.figure3 = plt.figure(random_name)
 
         for i in range(len(self.names)):
+            plt.bar(self.names[i], self.rhs[i], width=0.3, label=self.names[i])
             plt.text(i, self.rhs[i] / 2, self.rhs[i], ha = 'center')
 
         plt.title("Relativna vlažnost")
-        plt.ylabel("Postotak %")
+        plt.ylabel("%")
+        plt.legend()
         plt.savefig("rhs.png")
 
     def graph_presses(self):
-        self.figure1 = plt.figure("Figure 4")
-
-        plt.bar(self.names, self.presses, width=0.3)
+        random_number = random.randint(0, random_limit)
+        random_name = "Figure " + str(random_number)
+        self.figure4 = plt.figure(random_name)
 
         for i in range(len(self.names)):
+            plt.bar(self.names[i], self.presses[i], width=0.3, label=self.names[i])
             plt.text(i, self.presses[i] / 2, self.presses[i], ha = 'center')
 
         plt.title("Tlak zraka")
-        plt.ylabel("pritisak hPa")
+        plt.ylabel("hPa")
+        plt.legend()
         plt.savefig("presses.png")
 
     def graph_wavgs(self):
-        self.figure1 = plt.figure("Figure 5")
-
-        plt.bar(self.names, self.wavgs, width=0.3)
+        random_number = random.randint(0, random_limit)
+        random_name = "Figure " + str(random_number)
+        self.figure5 = plt.figure(random_name)
 
         for i in range(len(self.names)):
+            plt.bar(self.names[i], self.wavgs[i], width=0.3, label=self.names[i])
             plt.text(i, self.wavgs[i] / 2, self.wavgs[i], ha = 'center')
 
         plt.title("Brzina vjetra")
-        plt.ylabel("brzina m/s")
+        plt.ylabel("m/s")
+        plt.legend()
         plt.savefig("wavgs.png")
+
+    def graph_precips(self):
+        random_number = random.randint(0, random_limit)
+        random_name = "Figure " + str(random_number)
+        self.figure6 = plt.figure(random_name)
+
+        for i in range(len(self.names)):
+            plt.bar(self.names[i], self.precips[i], width=0.3, label=self.names[i])
+            plt.text(i, self.precips[i] / 2, self.precips[i], ha = 'center')
+
+        plt.title("Oborine u 24h")
+        plt.ylabel("mm")
+        plt.legend()
+        plt.savefig("precips.png")
 
     def show_graphs(self):
         image_temps = Image.open("temps.png")
@@ -155,6 +180,9 @@ class WindowCompareStations:
 
         image_wavgs = Image.open("wavgs.png")
         image_tk_wavgs = ImageTk.PhotoImage(image_wavgs)
+
+        image_precips = Image.open("precips.png")
+        image_tk_precips = ImageTk.PhotoImage(image_precips)
 
         image_label_temps = Label(self.top, image=image_tk_temps)
         image_label_temps.grid(column=0, row=0)
@@ -175,3 +203,7 @@ class WindowCompareStations:
         image_label_wavgs = Label(self.top, image=image_tk_wavgs)
         image_label_wavgs.grid(column=1, row=1)
         image_label_wavgs.image = image_tk_wavgs
+
+        image_label_precips = Label(self.top, image=image_tk_precips)
+        image_label_precips.grid(column=2, row=1)
+        image_label_precips.image = image_tk_precips
