@@ -2,7 +2,8 @@ from tkinter import *
 
 import stations
 import modules.station_data as station_data
-from modules.GUI import ButtonStation, WindowStationInfo
+from modules.ButtonStation import ButtonStation
+from modules.WindowStationInfo import WindowStationInfo
 
 root = Tk()
 root.minsize(600, 500) # 960, 720
@@ -43,9 +44,9 @@ def set_station_buttons(stations):
         column = i // rows
 
         if column == 0: 
-            btnNew = ButtonStation(frameStationButtons1, stations[i].get("name"), stations[i].get("url"), open_station_in_new_window)
+            btnNew = ButtonStation(frameStationButtons1, stations[i], open_station_in_new_window)
         else:
-            btnNew = ButtonStation(frameStationButtons2, stations[i].get("name"), stations[i].get("url"), open_station_in_new_window)
+            btnNew = ButtonStation(frameStationButtons2, stations[i], open_station_in_new_window)
 
         buttonStations.append(btnNew)
 

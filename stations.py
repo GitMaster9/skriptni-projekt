@@ -8,11 +8,6 @@ station2 = {
     "name": "Brešca"
 }
 
-station3 = {
-    "url": "kastav",
-    "name": "Kastav"
-}
-
 station4 = {
     "url": "rijeka-hosti",
     "name": "Rijeka-Hosti"
@@ -199,14 +194,9 @@ station89 = {
 }
 
 
-stations_all = [station1, station2, station3, station4, station5, station6, station8, station10, station12, station13, station17, station18, station22, station27, station29, station30, station32, station39, station40, station43, station44, station46, station49, station53, station55, station56, station57, station61, station62, station64, station66, station67, station68, station69, station70, station71, station75, station77, station87, station89]
+stations_all = [station1, station2, station4, station5, station6, station8, station10, station12, station13, station17, station18, station22, station27, station29, station30, station32, station39, station40, station43, station44, station46, station49, station53, station55, station56, station57, station61, station62, station64, station66, station67, station68, station69, station70, station71, station75, station77, station87, station89]
 
-stations_selected = [station1, station2, station3, station4, station5, station6, station13, station17, station22, station27, station32]
+stations_selected = [station1, station2, station4, station5, station6, station13, station17, station22, station27, station32, station53, station64]
 
 def fetch_all_stations():
     return stations_selected
-
-def get_station_by_name(name):
-    for station in stations_all:
-        if station.get("name") == name:
-            return station
