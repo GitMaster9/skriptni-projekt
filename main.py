@@ -30,8 +30,8 @@ def set_station_buttons(stations):
     frameStationButtons2 = LabelFrame(root, bd=0)
 
     # postavljanje u window
-    frameStationButtons1.place(relx=0.3, rely=0.05, anchor=N)
-    frameStationButtons2.place(relx=0.7, rely=0.05, anchor=N)
+    frameStationButtons1.place(relx=0.35, rely=0.05, anchor=N)
+    frameStationButtons2.place(relx=0.65, rely=0.05, anchor=N)
 
     global buttonStations
     buttonStations.clear()

@@ -1,5 +1,6 @@
 from tkinter import *
-from tkinter import ttk
+
+import stations
 
 error_message = "Nema podataka"
 
@@ -16,6 +17,7 @@ class WindowStationInfo:
     def __init__(self, json_file, stations_dict_all):
         self.json_file = json_file
         self.stations_dict_all = stations_dict_all
+        self.max_number_of_stations_to_compare = 4
 
         self.top = Toplevel()
         self.top.minsize(960, 720) # 1280, 720 # 800, 600
@@ -33,9 +35,9 @@ class WindowStationInfo:
         self.frame_stats_datetime.place(relx=0.5, rely=0.2, anchor=N)
         self.frame_stats_placeholder.place(relx=0.45, rely=0.3, anchor=N)
         self.frame_stats.place(relx=0.55, rely=0.3, anchor=N)
-        self.frame_compare1.place(relx=0.4, rely=0.6, anchor=N)
-        self.frame_compare2.place(relx=0.6, rely=0.6, anchor=N)
-        self.frame_button_compare.place(relx=0.5, rely=0.9, anchor=N)
+        self.frame_compare1.place(relx=0.4, rely=0.5, anchor=N)
+        self.frame_compare2.place(relx=0.6, rely=0.5, anchor=N)
+        self.frame_button_compare.place(relx=0.5, rely=0.8, anchor=N)
 
         self.get_all_station_data(self.json_file)
         self.display_station_info_placeholder()
@@ -159,8 +161,11 @@ class WindowStationInfo:
         self.button_remove_compare_list = Button(self.frame_button_compare, text="Remove", command=self.remove_from_compare_list, state=DISABLED)
         self.button_remove_compare_list.pack(fill=BOTH)
 
-        self.button_compare = Button(self.frame_button_compare, text="Compare", command=self.compare_list, state=DISABLED)
-        self.button_compare.pack(fill=BOTH)
+        self.button_compare_selected = Button(self.frame_button_compare, text="Compare selected", command=self.compare_selected_stations, state=DISABLED)
+        self.button_compare_selected.pack(fill=BOTH)
+
+        self.button_compare_closest = Button(self.frame_button_compare, text="Compare closest", command=self.compare_closest_stations)
+        self.button_compare_closest.pack(fill=BOTH)
 
     def reset_frame_by_name(self, frameName):
         for widget in frameName.winfo_children():
@@ -174,7 +179,7 @@ class WindowStationInfo:
 
         result = self.stations_to_compare.count(self.selected_to_add)
 
-        if result == 0:
+        if result == 0 and len(self.stations_to_compare) < self.max_number_of_stations_to_compare:
             self.button_add_compare_list['state'] = NORMAL
 
     def select_to_remove(self, e):
@@ -193,9 +198,9 @@ class WindowStationInfo:
         self.listbox2.insert(END, self.selected_to_add)
 
         if len(self.stations_to_compare) > 0:
-            self.button_compare['state'] = NORMAL
+            self.button_compare_selected['state'] = NORMAL
         else:
-            self.button_compare['state'] = DISABLED
+            self.button_compare_selected['state'] = DISABLED
 
     def remove_from_compare_list(self):
         self.button_add_compare_list['state'] = DISABLED
@@ -205,14 +210,22 @@ class WindowStationInfo:
         self.listbox2.delete(ANCHOR)
 
         if len(self.stations_to_compare) > 0:
-            self.button_compare['state'] = NORMAL
+            self.button_compare_selected['state'] = NORMAL
         else:
-            self.button_compare['state'] = DISABLED
+            self.button_compare_selected['state'] = DISABLED
 
-    def compare_list(self):
-        print("COMPARE")
+    def compare_stations(self, stations_to_compare_to):
 
-# heat - osjet temperature
-# wgust - udari vjetra
-# wavg - brzina vjetra
-# wdir - smjer vjetra
+        print("compare stations")
+
+    def compare_selected_stations(self):
+        stations_to_compare = []
+        for station in self.stations_to_compare:
+            current_station = stations.get_station_by_name(station)
+            current_station_url = current_station.get("url")
+            stations_to_compare.append(current_station_url)
+
+        print(stations_to_compare)
+
+    def compare_closest_stations(self):
+        print("Compare closest stations")
