@@ -1,9 +1,14 @@
 from tkinter import *
+import geopy.distance as distance
+import threading
 
 from modules.WindowCompareStations import WindowCompareStations
 import modules.station_data as station_data
+import modules.threadStarter as threadStarter
 
 error_message = "Nema podataka"
+
+thread_find_closest_stations = threading.Thread()
 
 class WindowStationInfo:
     def __init__(self, json_file, stations_dict_all):
@@ -35,6 +40,9 @@ class WindowStationInfo:
         self.display_station_info_placeholder()
         self.display_station_info()
         self.display_compare_list()
+
+        global thread_find_closest_stations
+        threadStarter.startThread(thread_find_closest_stations, self.find_closest_stations)
 
         self.top.mainloop()
 
@@ -140,6 +148,7 @@ class WindowStationInfo:
         self.listbox2.pack()
 
         self.stations_to_compare = []
+        self.stations_closest = []
 
         for station in self.stations_can_compare:
             current_name = station.get("name")
@@ -157,7 +166,7 @@ class WindowStationInfo:
         self.button_compare_selected = Button(self.frame_button_compare, text="Compare selected", command=self.compare_selected_stations, state=DISABLED)
         self.button_compare_selected.pack(fill=BOTH)
 
-        self.button_compare_closest = Button(self.frame_button_compare, text="Compare closest", command=self.compare_closest_stations)
+        self.button_compare_closest = Button(self.frame_button_compare, text="Compare closest", command=self.compare_closest_stations, state=DISABLED)
         self.button_compare_closest.pack(fill=BOTH)
 
     def reset_frame_by_name(self, frameName):
@@ -183,18 +192,6 @@ class WindowStationInfo:
                 self.button_add_compare_list['state'] = NORMAL
                 break
 
-    
-        #if len(self.stations_to_compare) < self.max_number_of_stations_to_compare:
-        #    self.selected_to_add
-        #    self.button_add_compare_list['state'] = NORMAL
-        
-        #self.selected_to_add = self.listbox1.get(ANCHOR)
-
-        #result = self.stations_to_compare.count(self.selected_to_add)
-
-        #if result == 0 and len(self.stations_to_compare) < self.max_number_of_stations_to_compare:
-        #    self.button_add_compare_list['state'] = NORMAL
-
     def select_to_remove(self, e):
         self.button_add_compare_list['state'] = DISABLED
         self.button_remove_compare_list['state'] = DISABLED
@@ -207,10 +204,6 @@ class WindowStationInfo:
                 self.selected_to_remove = station
                 self.button_remove_compare_list['state'] = NORMAL
                 break
-        #----------
-        #self.selected_to_remove = self.listbox2.get(ANCHOR)
-
-        #self.button_remove_compare_list['state'] = NORMAL
 
     def add_to_compare_list(self):
         self.button_add_compare_list['state'] = DISABLED
@@ -249,4 +242,27 @@ class WindowStationInfo:
         self.compare_stations(self.json_file, self.stations_to_compare)
 
     def compare_closest_stations(self):
-        print("Compare closest stations")
+        self.compare_stations(self.json_file, self.stations_closest)
+
+    def find_closest_stations(self):
+        self.button_compare_closest['state'] = DISABLED
+        station_coordinates = (self.json_file.get("data").get("station").get("lat"), self.json_file.get("data").get("station").get("lon"))
+        
+        stations_to_compare_to = []
+        for station in self.stations_dict_all:
+            if station.get("name") == self.json_file.get("data").get("station").get("name"):
+                continue
+            current_station = station_data.get_station_data(station.get("url"))
+            current_station_coordinates = (current_station.get("data").get("station").get("lat"), current_station.get("data").get("station").get("lon"))
+            dist = distance.distance(station_coordinates, current_station_coordinates).km
+            station["distance"] = dist
+            stations_to_compare_to.append(station)
+        
+        stations_to_compare_to.sort(key=lambda x: x.get("distance"))
+        
+        stations_to_compare_to = stations_to_compare_to[:5]
+
+        self.stations_closest = stations_to_compare_to
+
+        if len(self.stations_closest) > 0:
+            self.button_compare_closest['state'] = NORMAL
