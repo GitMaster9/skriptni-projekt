@@ -17,6 +17,10 @@ class WindowCompareStations:
         self.json_file = json_file
         self.stations_to_compare = stations_to_compare
 
+        print(self.json_file.get("data").get("station").get("name"))
+        for station in self.stations_to_compare:
+            print(station.get("data").get("station").get("name"))
+
         self.top = Toplevel()
         self.top.minsize(960, 720) # 1280, 720 # 800, 600
         self.top.title('Usporedba stanica')
@@ -69,6 +73,8 @@ class WindowCompareStations:
             self.rhs.append(rh)
             self.presses.append(press)
             self.wavgs.append(wavg)
+
+        print(self.temps)
 
     def reset_frame_by_name(self, frameName):
         for widget in frameName.winfo_children():

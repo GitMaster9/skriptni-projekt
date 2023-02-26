@@ -60,7 +60,7 @@ station22 = {
 
 station27 = {
     "url": "grobnik",
-    "name": "Grobnik"
+    "name": "Grobnik-Automotodrom"
 }
 
 station29 = {

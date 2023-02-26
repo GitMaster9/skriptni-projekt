@@ -250,7 +250,10 @@ class WindowStationInfo:
         
         stations_to_compare_to = []
         for station in self.stations_dict_all:
+            print(station.get("name"))
+            print(self.json_file.get("data").get("station").get("name"))
             if station.get("name") == self.json_file.get("data").get("station").get("name"):
+                print("IF")
                 continue
             current_station = station_data.get_station_data(station.get("url"))
             current_station_coordinates = (current_station.get("data").get("station").get("lat"), current_station.get("data").get("station").get("lon"))
@@ -260,7 +263,7 @@ class WindowStationInfo:
         
         stations_to_compare_to.sort(key=lambda x: x.get("distance"))
         
-        stations_to_compare_to = stations_to_compare_to[:5]
+        stations_to_compare_to = stations_to_compare_to[:4]
 
         self.stations_closest = stations_to_compare_to
 
