@@ -6,8 +6,6 @@ from modules.WindowCompareStations import WindowCompareStations
 import modules.station_data as station_data
 import modules.threadStarter as threadStarter
 
-error_message = "Nema podataka"
-
 thread_find_closest_stations = threading.Thread()
 
 class WindowStationInfo:
