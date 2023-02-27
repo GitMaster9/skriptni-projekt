@@ -19,7 +19,7 @@ buttonStations = []
 stations_all = stations.fetch_all_stations()
 
 def open_station_in_new_window(requestURL):
-    json_file = station_data.get_station_data(requestURL)
+    json_file = station_data.get_station_json_file(requestURL)
     new_window = WindowStationInfo(json_file, stations_all)
 
 def set_station_buttons(stations):
@@ -49,12 +49,6 @@ def set_station_buttons(stations):
             btnNew = ButtonStation(frameStationButtons2, stations[i], open_station_in_new_window)
 
         buttonStations.append(btnNew)
-
-def display_all_stations():
-    set_station_buttons(stations_all)
-
-def display_single_station():
-    print()
 
 stations_all = stations.fetch_all_stations()
 set_station_buttons(stations_all)

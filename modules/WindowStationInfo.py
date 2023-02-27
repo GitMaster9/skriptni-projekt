@@ -47,49 +47,26 @@ class WindowStationInfo:
         self.top.mainloop()
 
     def get_all_station_data(self, json_file):
-        self.datetime = json_file.get("data").get("last").get("datetime")
-        if (self.datetime == None):
-            self.datetime = error_message
+        self.station_info = station_data.get_station_info_from_json(json_file)
 
-        self.name = json_file.get("data").get("station").get("name")
-        if (self.name == None):
-            self.name = error_message
+        self.name = self.station_info.get("name")
+        self.url = self.station_info.get("url")
+        self.lat = self.station_info.get("lat")
+        self.lon = self.station_info.get("lon")
+        self.datetime = self.station_info.get("datetime")
+        self.temp = self.station_info.get("temp")
+        self.heat = self.station_info.get("heat")
+        self.rh = self.station_info.get("rh")
+        self.press = self.station_info.get("press")
+        self.wavg = self.station_info.get("wavg")
+        self.precip = self.station_info.get("precip24")
 
-        self.temp = json_file.get("data").get("last").get("temp")
-        if (self.temp == None):
-            self.temp = error_message
-        else:
-            self.temp = str(self.temp) + " °C"
-
-        self.heat = json_file.get("data").get("last").get("heat")
-        if (self.heat == None):
-            self.heat = error_message
-        else:
-            self.heat = str(self.heat) + " °C"
-
-        self.rh = json_file.get("data").get("last").get("rh")
-        if (self.rh == None):
-            self.rh = error_message
-        else:
-            self.rh = str(self.rh) + "%"
-
-        self.press = json_file.get("data").get("last").get("press")
-        if (self.press == None):
-            self.press = error_message
-        else:
-            self.press = str(self.press) + " hPa"
-
-        self.wavg = json_file.get("data").get("last").get("wavg")
-        if (self.wavg == None):
-            self.wavg = error_message
-        else:
-            self.wavg = str(self.wavg) + " m/s"
-
-        self.precip = json_file.get("data").get("last").get("precip24")
-        if (self.precip == None):
-            self.precip = error_message
-        else:
-            self.precip = str(self.precip) + " mm"
+        self.temp = str(self.temp) + " °C"
+        self.heat = str(self.heat) + " °C"
+        self.rh = str(self.rh) + "%"
+        self.press = str(self.press) + " hPa"
+        self.wavg = str(self.wavg) + " m/s"
+        self.precip = str(self.precip) + " mm"
 
         self.stations_can_compare = []
 
@@ -212,7 +189,6 @@ class WindowStationInfo:
 
         for station in self.stations_to_compare:
             if current_station_name in station.values():
-                print("Stanica za maknuti je nađena")
                 self.selected_to_remove = station
                 self.button_remove_compare_list['state'] = NORMAL
                 break
@@ -241,37 +217,45 @@ class WindowStationInfo:
         else:
             self.button_compare_selected['state'] = DISABLED
 
-    def compare_stations(self, station, stations_to_compare_to):
+    def compare_stations(self, stations_to_compare):
         json_files = []
 
-        for station_to_compare in stations_to_compare_to:
-            json_file = station_data.get_station_data(station_to_compare.get("url"))
+        for station in stations_to_compare:
+            json_file = station_data.get_station_json_file(station.get("url"))
             json_files.append(json_file)
 
-        new_window = WindowCompareStations(station, json_files)
+        new_window = WindowCompareStations(json_files)
 
     def compare_selected_stations(self):
-        self.compare_stations(self.json_file, self.stations_to_compare)
+        stations_to_compare = []
+        stations_to_compare.append(self.station_info)
+        stations_to_compare = stations_to_compare + self.stations_to_compare
+        self.compare_stations(stations_to_compare)
 
     def compare_closest_stations(self):
-        self.compare_stations(self.json_file, self.stations_closest)
+        stations_to_compare = []
+        stations_to_compare.append(self.station_info)
+        stations_to_compare = stations_to_compare + self.stations_closest
+        self.compare_stations(stations_to_compare)
 
     def find_closest_stations(self):
         self.button_compare_closest['state'] = DISABLED
-        station_coordinates = (self.json_file.get("data").get("station").get("lat"), self.json_file.get("data").get("station").get("lon"))
+        station_coordinates = (self.lat, self.lon)
         
         stations_to_compare_to = []
         for station in self.stations_dict_all:
-            if station.get("name") == self.json_file.get("data").get("station").get("name"):
+            if station.get("name") == self.name:
                 continue
-            current_station = station_data.get_station_data(station.get("url"))
-            current_station_coordinates = (current_station.get("data").get("station").get("lat"), current_station.get("data").get("station").get("lon"))
+            current_station_json = station_data.get_station_json_file(station.get("url"))
+            current_station = station_data.get_station_info_from_json(current_station_json)
+            current_station_lat = current_station.get("lat")
+            current_station_lon = current_station.get("lon")
+            current_station_coordinates = (current_station_lat, current_station_lon)
             dist = distance.distance(station_coordinates, current_station_coordinates).km
             station["distance"] = dist
             stations_to_compare_to.append(station)
         
         stations_to_compare_to.sort(key=lambda x: x.get("distance"))
-        
         stations_to_compare_to = stations_to_compare_to[:4]
 
         self.stations_closest = stations_to_compare_to

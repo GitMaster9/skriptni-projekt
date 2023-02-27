@@ -1,16 +1,16 @@
 from tkinter import *
 import random
-
 import matplotlib.pyplot as plt
 from PIL import Image, ImageTk
+
+import modules.station_data as station_data
 
 error_message = "Nema podataka"
 offset_y = 0.03
 random_limit = 100000
 
 class WindowCompareStations:
-    def __init__(self, json_file, stations_to_compare):
-        self.json_file = json_file
+    def __init__(self, stations_to_compare):
         self.stations_to_compare = stations_to_compare
 
         self.top = Toplevel()
@@ -30,45 +30,23 @@ class WindowCompareStations:
 
     def get_data_from_stations(self):
         self.names = []
-        name = self.json_file.get("data").get("station").get("name")
-        self.names.append(name)
-
         self.temps = []
-        temp = self.json_file.get("data").get("last").get("temp")
-        self.temps.append(temp)
-
         self.heats = []
-        heat = self.json_file.get("data").get("last").get("heat")
-        self.heats.append(heat)
-
         self.rhs = []
-        rh = self.json_file.get("data").get("last").get("rh")
-        self.rhs.append(rh)
-
         self.presses = []
-        press = self.json_file.get("data").get("last").get("press")
-        self.presses.append(press)
-
         self.wavgs = []
-        wavg = self.json_file.get("data").get("last").get("wavg")
-        self.wavgs.append(wavg)
-
         self.precips = []
-        precip = self.json_file.get("data").get("last").get("precip24")
-        if precip is None:
-            precip = 0
-        self.precips.append(precip)
 
         for station in self.stations_to_compare:
-            name = station.get("data").get("station").get("name")
-            temp = station.get("data").get("last").get("temp")
-            heat = station.get("data").get("last").get("heat")
-            rh = station.get("data").get("last").get("rh")
-            press = station.get("data").get("last").get("press")
-            wavg = station.get("data").get("last").get("wavg")
-            precip = station.get("data").get("last").get("precip24")
-            if precip is None:
-                precip = 0
+            current_station = station_data.get_station_info_from_json(station)
+            name = current_station.get("name")
+            temp = current_station.get("temp")
+            heat = current_station.get("heat")
+            rh = current_station.get("rh")
+            press = current_station.get("press")
+            wavg = current_station.get("wavg")
+            precip = current_station.get("precip24")
+            
             self.names.append(name)
             self.temps.append(temp)
             self.heats.append(heat)
