@@ -16,7 +16,7 @@ class WindowStationInfo:
         self.max_number_of_stations_to_compare = 4
 
         self.top = Toplevel()
-        self.top.minsize(600, 700)
+        self.top.minsize(700, 700)
         self.top.title('Meteorološka postaja')
 
         self.frame_name = LabelFrame(self.top)
