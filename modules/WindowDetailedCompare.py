@@ -31,7 +31,7 @@ class WindowDetailedCompare:
         self.graph_wdirs_x_days(days)
         self.graph_precips_x_days(days)
 
-        self.show_graphs()
+        self.show_graphs(days)
 
     def get_data_from_stations(self):
         self.names = []
@@ -176,7 +176,7 @@ class WindowDetailedCompare:
         plt.xticks(ticks)
         plt.grid(linestyle="--")
         plt.legend()
-        plt.savefig("temps_{days}_days.png")
+        plt.savefig(f"temps_{days}_days.png")
         
     # function to create line graph for relative humidity (rhsA) in the last 7 days for 2 stations
     def graph_rhs_x_days(self, days):
@@ -217,7 +217,7 @@ class WindowDetailedCompare:
         plt.xticks(ticks)
         plt.grid(linestyle="--")
         plt.legend()
-        plt.savefig("rhs_{days}_days.png")
+        plt.savefig(f"rhs_{days}_days.png")
         
     # function to create line graph for pressure (pressesA) in the last 7 days for 2 stations
     def graph_presses_x_days(self, days):
@@ -258,7 +258,7 @@ class WindowDetailedCompare:
         plt.xticks(ticks)
         plt.grid(linestyle="--")
         plt.legend()
-        plt.savefig("presses_{days}_days.png")
+        plt.savefig(f"presses_{days}_days.png")
         
     # function to create line graph for wind speed (wavgsA) in the last 7 days for 2 stations
     def graph_wavgs_x_days(self, days):
@@ -299,7 +299,7 @@ class WindowDetailedCompare:
         plt.xticks(ticks)
         plt.grid(linestyle="--")
         plt.legend()
-        plt.savefig("wavgs_{days}_days.png")
+        plt.savefig(f"wavgs_{days}_days.png")
         
     # function to create scatter graph for wind direction (wdirsA) in the last 7 days for 2 stations,
     # wind direction is in degrees,
@@ -329,7 +329,7 @@ class WindowDetailedCompare:
         plt.xticks(ticks)
         plt.grid(linestyle="--")
         plt.legend()
-        plt.savefig("wdirs_{days}_days.png")
+        plt.savefig(f"wdirs_{days}_days.png")
 
         
     # function to create line graph for wind precipitation (precips) in the last 7 days for 2 stations
@@ -371,27 +371,27 @@ class WindowDetailedCompare:
         plt.xticks(ticks)
         plt.grid(linestyle="--")
         plt.legend()
-        plt.savefig("precips_{days}_days.png")
+        plt.savefig(f"precips_{days}_days.png")
 
-    def show_graphs(self):
+    def show_graphs(self, days):
         scrollable_frame = ScrollableFrame(self.top)
       
-        image_temps_x_days = Image.open("temps_{days}_days.png")
+        image_temps_x_days = Image.open(f"temps_{days}_days.png")
         image_tk_temps = ImageTk.PhotoImage(image_temps_x_days)
         
-        image_rhs_x_days = Image.open("rhs_{days}_days.png")
+        image_rhs_x_days = Image.open(f"rhs_{days}_days.png")
         image_tk_rhs = ImageTk.PhotoImage(image_rhs_x_days)
         
-        image_presses_x_days = Image.open("presses_{days}_days.png")
+        image_presses_x_days = Image.open(f"presses_{days}_days.png")
         image_tk_presses = ImageTk.PhotoImage(image_presses_x_days)
         
-        image_wavgs_x_days = Image.open("wavgs_{days}_days.png")
+        image_wavgs_x_days = Image.open(f"wavgs_{days}_days.png")
         image_tk_wavgs = ImageTk.PhotoImage(image_wavgs_x_days)
         
-        image_wdirs_x_days = Image.open("wdirs_{days}_days.png")
+        image_wdirs_x_days = Image.open(f"wdirs_{days}_days.png")
         image_tk_wdirs = ImageTk.PhotoImage(image_wdirs_x_days)
         
-        image_precips_x_days = Image.open("precips_{days}_days.png")
+        image_precips_x_days = Image.open(f"precips_{days}_days.png")
         image_tk_precips = ImageTk.PhotoImage(image_precips_x_days)
 
         image_label_temps = Label(scrollable_frame.scrollable_frame, image=image_tk_temps)

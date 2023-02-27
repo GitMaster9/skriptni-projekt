@@ -228,6 +228,13 @@ class WindowStationInfo:
             self.button_compare_selected['state'] = NORMAL
         else:
             self.button_compare_selected['state'] = DISABLED
+            
+        if len(self.stations_to_compare) == 1:
+            self.button_compare_detailed_7['state'] = NORMAL
+            self.button_compare_detailed_31['state'] = NORMAL
+        else:
+            self.button_compare_detailed_7['state'] = DISABLED
+            self.button_compare_detailed_31['state'] = DISABLED
 
     def compare_stations(self, stations_to_compare):
         json_files = []
