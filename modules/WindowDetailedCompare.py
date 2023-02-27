@@ -211,7 +211,7 @@ class WindowDetailedCompare:
                          alpha=0.2,
                          interpolate=True)
 
-        plt.title("Reltivna vlažnost u posljednjih 7 dana")
+        plt.title("Relativna vlažnost u posljednjih 7 dana")
         plt.ylabel("%", rotation=0, fontsize=15, labelpad=15)
         ticks = dates[0][::3 if days == 31 else 1]
         plt.xticks(ticks)
@@ -252,7 +252,7 @@ class WindowDetailedCompare:
                          alpha=0.2,
                          interpolate=True)
 
-        plt.title("Pritisak u posljednjih 7 dana")
+        plt.title("Tlak zraka u posljednjih 7 dana")
         plt.ylabel("hPa", rotation=0, fontsize=15, labelpad=15)
         ticks = dates[0][::3 if days == 31 else 1]
         plt.xticks(ticks)
@@ -365,7 +365,7 @@ class WindowDetailedCompare:
                          alpha=0.2,
                          interpolate=True)
 
-        plt.title("Padaline u posljednjih 7 dana")
+        plt.title("Oborine u posljednjih 7 dana")
         plt.ylabel("mm", rotation=0, fontsize=15, labelpad=15)
         ticks = dates[0][::3 if days == 31 else 1]
         plt.xticks(ticks)
