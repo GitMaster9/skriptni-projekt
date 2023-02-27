@@ -238,10 +238,14 @@ class WindowStationInfo:
 
         new_window = WindowCompareStations(json_files)
         
-    def compare_stations_detailed(self, station, station_to_compare_to, days):
-        station_to_compare_to_data = station_data.get_station_data(station_to_compare_to.get("url"))
+    def compare_stations_detailed(self, stations_to_compare, days):
+        json_files = []
+        
+        for station in stations_to_compare:
+            json_file = station_data.get_station_json_file(station.get("url"))
+            json_files.append(json_file)
 
-        new_window = WindowDetailedCompare(station, station_to_compare_to_data, days)
+        new_window = WindowDetailedCompare(json_files, days)
 
     def compare_selected_stations(self):
         stations_to_compare = []
@@ -256,7 +260,10 @@ class WindowStationInfo:
         self.compare_stations(stations_to_compare)
         
     def compare_2_stations(self, days):
-        self.compare_stations_detailed(self.json_file, self.stations_to_compare[0], days)
+        stations_to_compare = []
+        stations_to_compare.append(self.station_info)
+        stations_to_compare = stations_to_compare + self.stations_to_compare
+        self.compare_stations_detailed(stations_to_compare, days)
 
     def find_closest_stations(self):
         self.button_compare_closest['state'] = DISABLED

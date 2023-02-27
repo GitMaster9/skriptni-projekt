@@ -15,9 +15,8 @@ offset_y = 0.03
 random_limit = 100000
 
 class WindowDetailedCompare:
-    def __init__(self, json_file, station_to_compare, days):
-        self.json_file = json_file
-        self.station_to_compare = station_to_compare
+    def __init__(self, json_files, days):
+        self.json_files = json_files
 
         self.top = Toplevel()
         self.top.minsize(1600, 800)
@@ -36,13 +35,13 @@ class WindowDetailedCompare:
 
     def get_data_from_stations(self):
         self.names = []
-        name1 = self.json_file.get("data").get("station").get("name")
+        name1 = self.json_files[0].get("data").get("station").get("name")
         self.names.append(name1)
-        name2 = self.station_to_compare.get("data").get("station").get("name")
-        self.names.append(name2)        
+        name2 = self.json_files[1].get("data").get("station").get("name")
+        self.names.append(name2)
         
-        station_1_data = self.json_file.get("data").get("archive").get("daily")
-        station_2_data = self.station_to_compare.get("data").get("archive").get("daily")
+        station_1_data = self.json_files[0].get("data").get("archive").get("daily")
+        station_2_data = self.json_files[1].get("data").get("archive").get("daily")
         
         # datetime
         self.datetimes = []
