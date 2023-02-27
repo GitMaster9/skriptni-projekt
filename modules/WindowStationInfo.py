@@ -18,7 +18,7 @@ class WindowStationInfo:
 
         self.top = Toplevel()
         self.top.minsize(960, 720)
-        self.top.title('Stanica')
+        self.top.title('Meteorološka postaja')
 
         self.frame_name = LabelFrame(self.top)
         self.frame_stats_datetime = LabelFrame(self.top)
@@ -169,16 +169,16 @@ class WindowStationInfo:
         self.listbox1.bind("<<ListboxSelect>>", self.select_to_add)
         self.listbox2.bind("<<ListboxSelect>>", self.select_to_remove)
 
-        self.button_add_compare_list = Button(self.frame_button_compare, text="Add", command=self.add_to_compare_list, state=DISABLED)
+        self.button_add_compare_list = Button(self.frame_button_compare, text="Dodaj", command=self.add_to_compare_list, state=DISABLED)
         self.button_add_compare_list.pack(fill=BOTH)
 
-        self.button_remove_compare_list = Button(self.frame_button_compare, text="Remove", command=self.remove_from_compare_list, state=DISABLED)
+        self.button_remove_compare_list = Button(self.frame_button_compare, text="Ukloni", command=self.remove_from_compare_list, state=DISABLED)
         self.button_remove_compare_list.pack(fill=BOTH)
 
-        self.button_compare_selected = Button(self.frame_button_compare, text="Compare selected", command=self.compare_selected_stations, state=DISABLED)
+        self.button_compare_selected = Button(self.frame_button_compare, text="Usporedi odabrane postaje", command=self.compare_selected_stations, state=DISABLED)
         self.button_compare_selected.pack(fill=BOTH)
 
-        self.button_compare_closest = Button(self.frame_button_compare, text="Compare closest", command=self.compare_closest_stations, state=DISABLED)
+        self.button_compare_closest = Button(self.frame_button_compare, text="Usporedi najbliže postaje", command=self.compare_closest_stations, state=DISABLED)
         self.button_compare_closest.pack(fill=BOTH)
 
     def reset_frame_by_name(self, frameName):

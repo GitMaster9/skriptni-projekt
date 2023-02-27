@@ -7,7 +7,7 @@ from modules.WindowStationInfo import WindowStationInfo
 
 root = Tk()
 root.minsize(600, 500) # 960, 720
-root.title('Weather Compare')
+root.title('Usporedba meteoroloških postaja')
 
 frameStationButtons1 = LabelFrame()
 frameStationButtons2 = LabelFrame()

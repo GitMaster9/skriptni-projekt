@@ -1,6 +1,4 @@
 from tkinter import *
-import matplotlib
-matplotlib.use('TkAgg')
 import random
 
 import matplotlib.pyplot as plt
@@ -17,7 +15,7 @@ class WindowCompareStations:
 
         self.top = Toplevel()
         self.top.minsize(960, 720)
-        self.top.title('Usporedba stanica')
+        self.top.title('Usporedba odabranih stanica')
 
         self.get_data_from_stations()
 
