@@ -3,6 +3,7 @@ import geopy.distance as distance
 import threading
 
 from modules.WindowCompareStations import WindowCompareStations
+from modules.WindowDetailedCompare import WindowDetailedCompare
 import modules.station_data as station_data
 import modules.threadStarter as threadStarter
 
@@ -15,7 +16,7 @@ class WindowStationInfo:
         self.max_number_of_stations_to_compare = 4
 
         self.top = Toplevel()
-        self.top.minsize(960, 720)
+        self.top.minsize(960, 800)
         self.top.title('Meteorološka postaja')
 
         self.frame_name = LabelFrame(self.top)
@@ -26,13 +27,13 @@ class WindowStationInfo:
         self.frame_compare2 = LabelFrame(self.top)
         self.frame_button_compare = LabelFrame(self.top)
 
-        self.frame_name.place(relx=0.5, rely=0.1, anchor=N)
-        self.frame_stats_datetime.place(relx=0.5, rely=0.2, anchor=N)
-        self.frame_stats_placeholder.place(relx=0.45, rely=0.3, anchor=N)
-        self.frame_stats.place(relx=0.6, rely=0.3, anchor=N)
-        self.frame_compare1.place(relx=0.4, rely=0.5, anchor=N)
-        self.frame_compare2.place(relx=0.6, rely=0.5, anchor=N)
-        self.frame_button_compare.place(relx=0.5, rely=0.8, anchor=N)
+        self.frame_name.place(relx=0.5, rely=0.05, anchor=N)
+        self.frame_stats_datetime.place(relx=0.5, rely=0.15, anchor=N)
+        self.frame_stats_placeholder.place(relx=0.45, rely=0.2, anchor=N)
+        self.frame_stats.place(relx=0.6, rely=0.2, anchor=N)
+        self.frame_compare1.place(relx=0.4, rely=0.4, anchor=N)
+        self.frame_compare2.place(relx=0.6, rely=0.4, anchor=N)
+        self.frame_button_compare.place(relx=0.5, rely=0.7, anchor=N)
 
         self.get_all_station_data(self.json_file)
         self.display_station_info_placeholder()
@@ -155,6 +156,12 @@ class WindowStationInfo:
 
         self.button_compare_closest = Button(self.frame_button_compare, text="Usporedi najbliže postaje", command=self.compare_closest_stations, state=DISABLED)
         self.button_compare_closest.pack(fill=BOTH)
+        
+        self.button_compare_detailed_7 = Button(self.frame_button_compare, text="Detaljna usporedba 7 dana", command=lambda: self.compare_2_stations(days=7), state=DISABLED)
+        self.button_compare_detailed_7.pack(fill=BOTH)
+        
+        self.button_compare_detailed_31 = Button(self.frame_button_compare, text="Detaljna usporedba 1 mjesec", command=lambda: self.compare_2_stations(days=31), state=DISABLED)
+        self.button_compare_detailed_31.pack(fill=BOTH)
 
     def reset_frame_by_name(self, frameName):
         for widget in frameName.winfo_children():
@@ -202,6 +209,13 @@ class WindowStationInfo:
             self.button_compare_selected['state'] = NORMAL
         else:
             self.button_compare_selected['state'] = DISABLED
+            
+        if len(self.stations_to_compare) == 1:
+            self.button_compare_detailed_7['state'] = NORMAL
+            self.button_compare_detailed_31['state'] = NORMAL
+        else:
+            self.button_compare_detailed_7['state'] = DISABLED
+            self.button_compare_detailed_31['state'] = DISABLED
 
     def remove_from_compare_list(self):
         self.button_add_compare_list['state'] = DISABLED
@@ -214,6 +228,13 @@ class WindowStationInfo:
             self.button_compare_selected['state'] = NORMAL
         else:
             self.button_compare_selected['state'] = DISABLED
+            
+        if len(self.stations_to_compare) == 1:
+            self.button_compare_detailed_7['state'] = NORMAL
+            self.button_compare_detailed_31['state'] = NORMAL
+        else:
+            self.button_compare_detailed_7['state'] = DISABLED
+            self.button_compare_detailed_31['state'] = DISABLED
 
     def compare_stations(self, stations_to_compare):
         json_files = []
@@ -223,6 +244,15 @@ class WindowStationInfo:
             json_files.append(json_file)
 
         new_window = WindowCompareStations(json_files)
+        
+    def compare_stations_detailed(self, stations_to_compare, days):
+        json_files = []
+        
+        for station in stations_to_compare:
+            json_file = station_data.get_station_json_file(station.get("url"))
+            json_files.append(json_file)
+
+        new_window = WindowDetailedCompare(json_files, days)
 
     def compare_selected_stations(self):
         stations_to_compare = []
@@ -235,6 +265,12 @@ class WindowStationInfo:
         stations_to_compare.append(self.station_info)
         stations_to_compare = stations_to_compare + self.stations_closest
         self.compare_stations(stations_to_compare)
+        
+    def compare_2_stations(self, days):
+        stations_to_compare = []
+        stations_to_compare.append(self.station_info)
+        stations_to_compare = stations_to_compare + self.stations_to_compare
+        self.compare_stations_detailed(stations_to_compare, days)
 
     def find_closest_stations(self):
         self.button_compare_closest['state'] = DISABLED

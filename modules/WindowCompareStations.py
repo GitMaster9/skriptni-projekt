@@ -82,7 +82,7 @@ class WindowCompareStations:
             plt.bar(self.names[i], self.heats[i], width=0.3, label=self.names[i])
             plt.text(i, self.heats[i] / 2, self.heats[i], ha = 'center')
 
-        plt.title("Osjećaj temperature")
+        plt.title("Osjet temperature")
         plt.ylabel("°C")
         plt.legend()
         plt.savefig("heats.png")
