@@ -1,16 +1,11 @@
 from tkinter import *
-from tkinter import ttk
 import random
 import numpy as np
-
 import matplotlib.pyplot as plt
 from PIL import Image, ImageTk
-
 from datetime import datetime
-
 from modules.ScrollableFrame import ScrollableFrame
 
-error_message = "Nema podataka"
 offset_y = 0.03
 random_limit = 100000
 

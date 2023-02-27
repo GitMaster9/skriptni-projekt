@@ -5,7 +5,6 @@ from PIL import Image, ImageTk
 
 import modules.station_data as station_data
 
-error_message = "Nema podataka"
 offset_y = 0.03
 random_limit = 100000
 
