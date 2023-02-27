@@ -1,3 +1,4 @@
+import sys
 from tkinter import *
 
 import stations
@@ -6,6 +7,7 @@ from modules.ButtonStation import ButtonStation
 from modules.WindowStationInfo import WindowStationInfo
 
 root = Tk()
+root.protocol("WM_DELETE_WINDOW", sys.exit)
 root.minsize(600, 500) # 960, 720
 root.title('Usporedba meteoroloških postaja')
 
